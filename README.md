@@ -19,7 +19,7 @@ Pull the mozilla sbt docker image with `docker pull mozilla/sbt` then run it on 
 docker run -it --rm -v ~/.ivy2:/root/.ivy2 -v ~/.sbt:/root/.sbt -v $PWD:/app -w /app mozilla/sbt sbt shell
 ```
 
-Have sbt run the application to process an input file with: 
+Then tell `sbt shell` to compile and run the application to process an input file with: 
 
 ```shell
 runMain YetAnotherArithmeticExpressionEvaluator example.txt
