@@ -38,7 +38,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   def numberOrBracedExpr: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
 
   /**
-   * Performs addition and subtraction of the list of "+|- Int" that terms have been evaluated to.
+   * Addition and subtraction of the list of "+|- Int" that one or more terms have been evaluated to.
    * @param in The structure returned by evaluating terms as Ints in term~rep("+"~term|"-"~term)
    * @return The result of the additions and subtractions.
    */
@@ -51,7 +51,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   }
 
   /**
-   * Performs multiplication or division of the list of "*|/ Int" that numbers have been evaluated to. 
+   * Multiplication or division of the list of "*|/ Int" that one or more numberOrBraced have been evaluated to.
    * @param in The structure returned by evaluating numberOrBraced as Ints in numberOrBracedExpr~rep("*"~numberOrBracedExpr|"/"~numberOrBracedExpr)
    * @return The result of the multiplications and divisions.
    */
