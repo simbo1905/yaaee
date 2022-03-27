@@ -31,4 +31,8 @@ class YetAnotherArithmeticExpressionEvaluatorTest extends org.scalatest.funsuite
   test( "(1 + 2) * 3") {
     assert(evaluate("(1 + 2) * 3") === 9)
   }
+
+  test( "-1 + (-3)") {
+    assert(evaluate("-1 + (-3)") === -4)
+  }
 }
