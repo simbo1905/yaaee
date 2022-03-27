@@ -13,13 +13,13 @@ Yet Another Arithmetic Expression Evaluator
    
 # Running In Docker
 
-Pull the mozilla sbt docker image with `docker pull mozilla/sbt` then run it on mac/linux with: 
+Pull the mozilla sbt docker image with `docker pull mozilla/sbt` then launch `sbt shell` on mac/linux with: 
 
 ```shell
 docker run -it --rm -v ~/.ivy2:/root/.ivy2 -v ~/.sbt:/root/.sbt -v $PWD:/app -w /app mozilla/sbt sbt shell
 ```
 
-Then tell `sbt shell` to compile and run the application to process an input file with: 
+Next instruct sbt to compile and run the application to process an input file with: 
 
 ```shell
 runMain YetAnotherArithmeticExpressionEvaluator example.txt
