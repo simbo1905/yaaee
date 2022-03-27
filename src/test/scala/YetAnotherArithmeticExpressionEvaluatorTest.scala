@@ -23,4 +23,12 @@ class YetAnotherArithmeticExpressionEvaluatorTest extends org.scalatest.funsuite
   test( "2 * 3 * 4") {
     assert(evaluate("2 * 3 * 4") === 24)
   }
+
+  test( "1 + 2 * 3") {
+    assert(evaluate("1 + 2 * 3") === 7)
+  }
+
+  test( "(1 + 2) * 3") {
+    assert(evaluate("(1 + 2) * 3") === 9)
+  }
 }
