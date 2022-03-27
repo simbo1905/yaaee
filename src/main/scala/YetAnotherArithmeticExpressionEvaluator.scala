@@ -23,7 +23,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   def expr: Parser[Int] = term~rep("+"~term | "-"~term) ^^ sum
 
   /**
-   * A term is a parser that returns an Int that applies the product() function  to a sequence of at least one
+   * A term is a parser that returns an Int that applies the product() function to a sequence of at least one
    * numberOrBracedExpr followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
    * lower precedence than numberOrBracedExpr as it requires all of them to be evaulated into Ints to pass into
    * product().
