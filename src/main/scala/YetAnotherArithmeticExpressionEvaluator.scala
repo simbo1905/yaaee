@@ -20,14 +20,14 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers {
   /**
    * `expr` is a parser that returns an Int that applies the `sum()` function to a sequence of least one `term`
    * followed by repeated "+ term" or "- term". This parser has lowest precedence as it requires all
-   * `term`s to be evaluated to `Int`s to pass into `sum()`.
+   * `terms` to be evaluated to Ints to pass into `sum()`.
    */
   def expr: Parser[Int] = term ~ rep("+" ~ term | "-" ~ term) ^^ sum
 
   /**
-   * `term`` is a parser that returns an Int that applies the `product()`` function to a sequence of at least one
+   * `term` is a parser that returns an Int that applies the `product()` function to a sequence of at least one
    * `numberOrBracedExpr` followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
-   * lower precedence than `numberOrBracedExpr`` as it requires all of them to be evaluated into Ints to pass into
+   * lower precedence than `numberOrBracedExpr` as it requires all of them to be evaluated into Ints to pass into
    * `product()`.
    */
   def term: Parser[Int] = numberOrBracedExpr ~ rep("*" ~ numberOrBracedExpr | "/" ~ numberOrBracedExpr) ^^ product
@@ -35,12 +35,12 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers {
   /**
    * `numberOrBracedExpr` is `wholeNumber.toInt()` else an expr between braces "( expr )". The `toInt()` form
    * the leaf nodes of the logical AST. These are propagated up the call chain. This statement does a logical recursion
-   * into "( expr )" which has highest precedence as it must be eagerly evaluated to be an Int.
+   * into "( expr )" which has highest precedence as it must be eagerly evaluated to an Int.
    */
   def numberOrBracedExpr: Parser[Int] = wholeNumber ^^ (_.toInt) | "(" ~> expr <~ ")"
 
   /**
-   * Addition and subtraction of the list of "+|- Int" that one or more terms have been evaluated to.
+   * Addition and subtraction of the list of "+|- Int" that one or more `term` have been evaluated to.
    *
    * @param in The structure returned by evaluating terms as Ints in term~rep("+"~term|"-"~term)
    * @return The result of the additions and subtractions.
@@ -54,7 +54,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers {
   }
 
   /**
-   * Multiplication or division of the list of "*|/ Int" that one or more numberOrBraced have been evaluated to.
+   * Multiplication or division of the list of "*|/ Int" that one or more `numberOrBraced`` have been evaluated to.
    *
    * @param in The structure returned by evaluating numberOrBraced as Ints in numberOrBracedExpr~rep("*"~numberOrBracedExpr|"/"~numberOrBracedExpr)
    * @return The result of the multiplications and divisions.
