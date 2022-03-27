@@ -34,7 +34,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   def term: Parser[Int] = numberOrBracedExpr~rep("*"~numberOrBracedExpr | "/"~numberOrBracedExpr) ^^ product
 
   /**
-   * `numberOrBracedExpr` is `wholeNumber.toInt()` else an expr between braces "( expr )". The `toInt()`` form
+   * `numberOrBracedExpr` is `wholeNumber.toInt()` else an expr between braces "( expr )". The `toInt()` form
    * the leaf nodes of the logical AST. These are propagated up the call chain. This statement does a logical recursion
    * into "( expr )" which has highest precedence as it must be eagerly evaluated to be an Int.
    */
