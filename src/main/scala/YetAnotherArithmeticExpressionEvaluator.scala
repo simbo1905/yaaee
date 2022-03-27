@@ -17,27 +17,33 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
 
   /**
    * An expression is the sum() function applied to a sequence of matches that is at least one term followed by
-   * repeated "+term" or "-term"
+   * repeated "+term" or "-term". This level of 'expr' is lowest precedence as it invokes 'term'. 
+   *
    * @return the adds/subtracts of the integers returned by the terms
    */
   def expr: Parser[Int] = term~rep("+"~term | "-"~term) ^^ sum
 
   /**
    * A term is the product() function applied to a sequence of matches that is at least one number followed by a
-   * repeated "*term" or "/term".
+   * repeated "*term" or "/term". This level has lower precedence than 'number' as it invokes it. 
+   *
    * @return the multiply/divides of the numbers
    */
   def term: Parser[Int] = number~rep("*"~number | "/"~number) ^^ product
 
   /**
-   * A number is a number else an expression between braces.
+   * A number is a wholeNumber else an expression between braces. The wholeNumbers are the leaf nodes of the 
+   * logical AST that are 'toInt' to give the 'Int's that propagate up the logical AST. This statement does 
+   * a logical recursion into any '( expr )' that that will evaulated to be a number.  
+   *
    * @return the number literal else the evaluation of the expression within braces
    */
   def number: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
 
   /**
-   * Performs addition or subtraction over a parsed token stream.
+   * Performs addition and subtraction of the list of "+|- Int" taht terms have been evaluated to. 
    * @param in The parsed token sequence returned by term~rep("+"~term | "-"~term)
+   *
    * @return
    */
   def sum( in: ~[Int, List[~[String, Int]]]): Int = in match {
@@ -49,7 +55,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   }
 
   /**
-   * Performs multiplication or division over a parsed token stream.
+   * Performs multiplication or division of the list of "*|/ Int" that numbers have been evaluated to. 
    * @param in The parsed token sequence returned by number~rep("*"~number | "/"~number)
    * @return
    */
