@@ -9,6 +9,9 @@ import scala.util.parsing.combinator._
  */
 class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
 {
+  /**
+   * Parse all of character sequence `expression` with our top-level `def expr: Parser[Int]` function.  
+   */
   def apply(expression: String): Int = parseAll(expr, expression) match {
     case Success(result, _) => result
     case NoSuccess(msg, _) => throw new IllegalArgumentException(s"could not parse '$expression' with error $msg")
