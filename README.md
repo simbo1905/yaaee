@@ -25,4 +25,4 @@ Have sbt run the application to process an input file with:
 runMain YetAnotherArithmeticExpressionEvaluator example.txt
 ```
 
-
+See also the GitHub Action build pipeline that runs the unit tests to check it all works. 
