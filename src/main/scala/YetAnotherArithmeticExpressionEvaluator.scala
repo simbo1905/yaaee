@@ -10,7 +10,7 @@ import scala.util.parsing.combinator._
 class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
 {
   /**
-   * Parse all of character sequence `expression` with our top-level `def expr: Parser[Int]` function.  
+   * Parse all of character sequence `expression` with our top-level `def expr: Parser[Int]` function.
    */
   def apply(expression: String): Int = parseAll(expr, expression) match {
     case Success(result, _) => result
@@ -19,9 +19,9 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   }
 
   /**
-   * A expr is a parser that returns an Int that applies the sum() function to a sequence of least one term
-   * followed by repeated "+ term" or "- term". This level of 'expr' is lowest precedence as it requires all
-   * terms to be evaluated to Ints to pass into sum().
+   * `expr` is a parser that returns an Int that applies the sum()` function to a sequence of least one `term``
+   * followed by repeated "+ term" or "- term". This parser has lowest precedence as it requires all
+   * `term`s to be evaluated to `Int`s to pass into `sum()`.
    */
   def expr: Parser[Int] = term~rep("+"~term | "-"~term) ^^ sum
 
