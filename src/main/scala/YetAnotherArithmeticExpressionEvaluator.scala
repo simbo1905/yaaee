@@ -19,24 +19,24 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   }
 
   /**
-   * `expr` is a parser that returns an Int that applies the sum()` function to a sequence of least one `term``
+   * `expr` is a parser that returns an Int that applies the `sum()` function to a sequence of least one `term``
    * followed by repeated "+ term" or "- term". This parser has lowest precedence as it requires all
    * `term`s to be evaluated to `Int`s to pass into `sum()`.
    */
   def expr: Parser[Int] = term~rep("+"~term | "-"~term) ^^ sum
 
   /**
-   * A term is a parser that returns an Int that applies the product() function to a sequence of at least one
-   * numberOrBracedExpr followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
-   * lower precedence than numberOrBracedExpr as it requires all of them to be evaulated into Ints to pass into
-   * product().
+   * `term`` is a parser that returns an Int that applies the `product()`` function to a sequence of at least one
+   * `numberOrBracedExpr`` followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
+   * lower precedence than `numberOrBracedExpr`` as it requires all of them to be evaluated into `Int`s to pass into
+   * `product()`.
    */
   def term: Parser[Int] = numberOrBracedExpr~rep("*"~numberOrBracedExpr | "/"~numberOrBracedExpr) ^^ product
 
   /**
-   * A numberOrBracedExpr is a "wholeNumber.toInt" else an expr between braces "( expr )". The wholeNumbers.toInt form
+   * `numberOrBracedExpr` is `wholeNumber.toInt()` else an expr between braces "( expr )". The `toInt()`` form
    * the leaf nodes of the logical AST. These are propagated up the call chain. This statement does a logical recursion
-   * into '( expr )' which has highest precedence as it must be eagerly evaluated to be an Int.
+   * into "( expr )" which has highest precedence as it must be eagerly evaluated to be an Int.
    */
   def numberOrBracedExpr: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
 
