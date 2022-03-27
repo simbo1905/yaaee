@@ -18,7 +18,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers {
   }
 
   /**
-   * `expr` is a parser that returns an Int that applies the `sum()` function to a sequence of least one `term``
+   * `expr` is a parser that returns an Int that applies the `sum()` function to a sequence of least one `term`
    * followed by repeated "+ term" or "- term". This parser has lowest precedence as it requires all
    * `term`s to be evaluated to `Int`s to pass into `sum()`.
    */
@@ -26,8 +26,8 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers {
 
   /**
    * `term`` is a parser that returns an Int that applies the `product()`` function to a sequence of at least one
-   * `numberOrBracedExpr`` followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
-   * lower precedence than `numberOrBracedExpr`` as it requires all of them to be evaluated into `Int`s to pass into
+   * `numberOrBracedExpr` followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
+   * lower precedence than `numberOrBracedExpr`` as it requires all of them to be evaluated into Ints to pass into
    * `product()`.
    */
   def term: Parser[Int] = numberOrBracedExpr ~ rep("*" ~ numberOrBracedExpr | "/" ~ numberOrBracedExpr) ^^ product
@@ -95,7 +95,7 @@ object YetAnotherArithmeticExpressionEvaluator {
             } match {
               case Failure(exception) =>
                 System.err.println(s"[WARN] line $line - ${exception}")
-              case Success(_) => // all good
+              case Success(_) => // noop
             }
           }
         }
