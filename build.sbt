@@ -10,3 +10,4 @@ lazy val root = (project in file(".")).
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.9" % Test
 libraryDependencies += "org.scala-lang.modules" % "scala-parser-combinators_2.13" % "2.1.1"
 
+scalacOptions := Seq("-feature", "-deprecation")

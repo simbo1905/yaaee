@@ -12,6 +12,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   def apply(expression: String): Int = parseAll(expr, expression) match {
     case Success(result, _) => result
     case NoSuccess(msg, _) => throw new IllegalArgumentException(s"could not parse '$expression' with error $msg")
+    case _ => throw new AssertionError("not reachable but needed to silence compiler warning ")
   }
 
   /**
@@ -43,6 +44,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
     case n0~sgnNumberList => sgnNumberList.foldLeft(n0) {
       case (z, "+"~n) => z+n
       case (z, "-"~n) => z-n
+      case _ => throw new AssertionError("not reachable but needed to silence compiler warning ")
     }
   }
 
@@ -55,6 +57,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
     case n0~opNumberList => opNumberList.foldLeft(n0) {
       case (z, "*"~n) => z*n
       case(z, "/"~n) => z/n
+      case _ => throw new AssertionError("not reachable but needed to silence compiler warning ")
     }
   }
 }
@@ -63,37 +66,36 @@ import scala.io.Source
 import scala.util.Using
 
 /**
- * A main class that validates arguments, exits with error codes, and that chooses to continue in the case of a bad
- * data within the provided file logging the error to standard out while returning an error code.
+ * A main class that validates arguments, exits with error codes for bad run arguments, and that chooses to continue
+ * processing in the face of bad expression within the file provided. It will print a warning message on stderr for bad
+ * expressions.
  */
 object YetAnotherArithmeticExpressionEvaluator extends App {
   var exitCode = 0
   if (args.length == 0) {
     println("Please provide the name of a file with one expression per line.")
-    exitCode = 1
+    System.exit(1)
   } else {
     val filename = args(0)
     if( Files.exists(Paths.get(filename)) && Paths.get(filename).toFile.isFile ) {
       val evaluate = new YetAnotherArithmeticExpressionEvaluator()
       Using(Source.fromFile(filename)) { bufferedSource =>
         var line = 1
-        for (expr <- bufferedSource.getLines) {
+        for (expr <- bufferedSource.getLines()) {
           Try {
             val answer = evaluate(expr)
             println(s"$expr = $answer")
             line += line
           } match {
             case Failure(exception) =>
-              exitCode = 3
-              System.err.println(s"line $line - $exception.toString")
+              System.err.println(s"[WARN] line $line - ${exception}")
             case Success(_) => // all good
           }
         }
       }
     } else {
       println(s"Provided filename '$filename' either does not exist or is not a regular file.")
-      exitCode = 2
+      System.exit(2)
     }
-    System.exit(exitCode)
   }
 }
