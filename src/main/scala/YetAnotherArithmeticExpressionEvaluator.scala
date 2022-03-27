@@ -70,31 +70,35 @@ import scala.util.Using
  * processing in the face of bad expression within the file provided. It will print a warning message on stderr for bad
  * expressions naming the line number.
  */
-object YetAnotherArithmeticExpressionEvaluator extends App {
-  if (args.length == 0) {
-    System.err.println("Please provide the name of a file with one expression per line.")
-    System.exit(1)
-  } else {
-    val filename = args(0)
-    if( Files.exists(Paths.get(filename)) && Paths.get(filename).toFile.isFile ) {
-      val evaluate = new YetAnotherArithmeticExpressionEvaluator()
-      Using(Source.fromFile(filename)) { bufferedSource =>
-        var line = 1
-        for (expr <- bufferedSource.getLines()) {
-          Try {
-            val answer = evaluate(expr)
-            println(s"$expr = $answer")
-            line += line
-          } match {
-            case Failure(exception) =>
-              System.err.println(s"[WARN] line $line - ${exception}")
-            case Success(_) => // all good
+object YetAnotherArithmeticExpressionEvaluator  {
+  def main(args: Array[String]): Unit ={
+    if (args.length == 0) {
+      System.err.println("Please provide the name of a file with one expression per line.")
+      System.exit(1)
+    } else {
+      val filename = args(0)
+      if( Files.exists(Paths.get(filename)) && Paths.get(filename).toFile.isFile ) {
+        val evaluate = new YetAnotherArithmeticExpressionEvaluator()
+        Using(Source.fromFile(filename)) { bufferedSource =>
+          var line = 1
+          for (expr <- bufferedSource.getLines()) {
+            Try {
+              val answer = evaluate(expr)
+              println(s"$expr = $answer")
+              line += line
+            } match {
+              case Failure(exception) =>
+                System.err.println(s"[WARN] line $line - ${exception}")
+              case Success(_) => // all good
+            }
           }
         }
+      } else {
+        System.err.println(s"Provided filename '$filename' either does not exist or is not a regular file.")
+        System.exit(2)
       }
-    } else {
-      System.err.println(s"Provided filename '$filename' either does not exist or is not a regular file.")
-      System.exit(2)
     }
   }
+
+
 }
