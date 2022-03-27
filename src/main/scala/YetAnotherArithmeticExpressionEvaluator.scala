@@ -16,53 +16,49 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   }
 
   /**
-   * An expression is the sum() function applied to a sequence of matches that is at least one term followed by
-   * repeated "+term" or "-term". This level of 'expr' is lowest precedence as it invokes 'term'. 
-   *
-   * @return the adds/subtracts of the integers returned by the terms
+   * A expr is a parser that returns an Int that applies the sum() function to a sequence of least one term
+   * followed by repeated "+ term" or "- term". This level of 'expr' is lowest precedence as it requires all
+   * terms to be evaluated to Ints to pass into sum().
    */
   def expr: Parser[Int] = term~rep("+"~term | "-"~term) ^^ sum
 
   /**
-   * A term is the product() function applied to a sequence of matches that is at least one number followed by a
-   * repeated "*term" or "/term". This level has lower precedence than 'number' as it invokes it. 
-   *
-   * @return the multiply/divides of the numbers
+   * A term is a parser that returns an Int that applies the product() function  to a sequence of at least one
+   * numberOrBracedExpr followed by repeated "* numberOrBracedExpr" or "/ numberOrBracedExpr". This level has
+   * lower precedence than numberOrBracedExpr as it requires all of them to be evaulated into Ints to pass into
+   * product().
    */
-  def term: Parser[Int] = number~rep("*"~number | "/"~number) ^^ product
+  def term: Parser[Int] = numberOrBracedExpr~rep("*"~numberOrBracedExpr | "/"~numberOrBracedExpr) ^^ product
 
   /**
-   * A number is a wholeNumber else an expression between braces. The wholeNumbers are the leaf nodes of the 
-   * logical AST that are 'toInt' to give the 'Int's that propagate up the logical AST. This statement does 
-   * a logical recursion into any '( expr )' that that will evaulated to be a number.  
-   *
-   * @return the number literal else the evaluation of the expression within braces
+   * A numberOrBracedExpr is a "wholeNumber.toInt" else an expr between braces "( expr )". The wholeNumbers.toInt form
+   * the leaf nodes of the logical AST. These are propagated up call chain. This statement does a logical recursion into
+   * any '( expr )' which has highest precedence as it must be evaluated to an Int for this parser to return an Int.
    */
-  def number: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
+  def numberOrBracedExpr: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
 
   /**
-   * Performs addition and subtraction of the list of "+|- Int" taht terms have been evaluated to. 
-   * @param in The parsed token sequence returned by term~rep("+"~term | "-"~term)
-   *
-   * @return
+   * Performs addition and subtraction of the list of "+|- Int" that terms have been evaluated to.
+   * @param in The structure returned by evaluating terms as Ints in term~rep("+"~term|"-"~term)
+   * @return The result of the additions and subtractions.
    */
   def sum( in: ~[Int, List[~[String, Int]]]): Int = in match {
-    case n0~sgnNumberList => sgnNumberList.foldLeft(n0) {
-      case (z, "+"~n) => z+n
-      case (z, "-"~n) => z-n
+    case i~sgnNumberList => sgnNumberList.foldLeft(i) {
+      case (i, "+"~n) => i+n
+      case (i, "-"~n) => i-n
       case _ => throw new AssertionError("Code not reachable but needed to silence compiler warning.")
     }
   }
 
   /**
    * Performs multiplication or division of the list of "*|/ Int" that numbers have been evaluated to. 
-   * @param in The parsed token sequence returned by number~rep("*"~number | "/"~number)
-   * @return
+   * @param in The structure returned by evaluating numberOrBraced as Ints in numberOrBracedExpr~rep("*"~numberOrBracedExpr|"/"~numberOrBracedExpr)
+   * @return The result of the multiplications and divisions.
    */
   def product( in: ~[Int, List[~[String, Int]]]): Int = in match {
-    case n0~opNumberList => opNumberList.foldLeft(n0) {
-      case (z, "*"~n) => z*n
-      case(z, "/"~n) => z/n
+    case i~sgnNumberList => sgnNumberList.foldLeft(i) {
+      case (i, "*"~n) => i*n
+      case(i, "/"~n) => i/n
       case _ => throw new AssertionError("Code not reachable but needed to silence compiler warning.")
     }
   }
