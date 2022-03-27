@@ -12,7 +12,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
   def apply(expression: String): Int = parseAll(expr, expression) match {
     case Success(result, _) => result
     case NoSuccess(msg, _) => throw new IllegalArgumentException(s"could not parse '$expression' with error $msg")
-    case _ => throw new AssertionError("not reachable but needed to silence compiler warning ")
+    case _ => throw new AssertionError("Code not reachable but needed to silence compiler warning.")
   }
 
   /**
@@ -31,7 +31,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
 
   /**
    * A number is a number else an expression between braces.
-   * @return the number literal else the valuation of the expression within braces
+   * @return the number literal else the evaluation of the expression within braces
    */
   def number: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
 
@@ -44,7 +44,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
     case n0~sgnNumberList => sgnNumberList.foldLeft(n0) {
       case (z, "+"~n) => z+n
       case (z, "-"~n) => z-n
-      case _ => throw new AssertionError("not reachable but needed to silence compiler warning ")
+      case _ => throw new AssertionError("Code not reachable but needed to silence compiler warning.")
     }
   }
 
@@ -57,7 +57,7 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
     case n0~opNumberList => opNumberList.foldLeft(n0) {
       case (z, "*"~n) => z*n
       case(z, "/"~n) => z/n
-      case _ => throw new AssertionError("not reachable but needed to silence compiler warning ")
+      case _ => throw new AssertionError("Code not reachable but needed to silence compiler warning.")
     }
   }
 }
@@ -68,12 +68,11 @@ import scala.util.Using
 /**
  * A main class that validates arguments, exits with error codes for bad run arguments, and that chooses to continue
  * processing in the face of bad expression within the file provided. It will print a warning message on stderr for bad
- * expressions.
+ * expressions naming the line number.
  */
 object YetAnotherArithmeticExpressionEvaluator extends App {
-  var exitCode = 0
   if (args.length == 0) {
-    println("Please provide the name of a file with one expression per line.")
+    System.err.println("Please provide the name of a file with one expression per line.")
     System.exit(1)
   } else {
     val filename = args(0)
@@ -94,7 +93,7 @@ object YetAnotherArithmeticExpressionEvaluator extends App {
         }
       }
     } else {
-      println(s"Provided filename '$filename' either does not exist or is not a regular file.")
+      System.err.println(s"Provided filename '$filename' either does not exist or is not a regular file.")
       System.exit(2)
     }
   }
