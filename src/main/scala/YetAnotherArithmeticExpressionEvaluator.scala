@@ -32,8 +32,8 @@ class YetAnotherArithmeticExpressionEvaluator extends JavaTokenParsers
 
   /**
    * A numberOrBracedExpr is a "wholeNumber.toInt" else an expr between braces "( expr )". The wholeNumbers.toInt form
-   * the leaf nodes of the logical AST. These are propagated up call chain. This statement does a logical recursion into
-   * any '( expr )' which has highest precedence as it must be evaluated to an Int for this parser to return an Int.
+   * the leaf nodes of the logical AST. These are propagated up the call chain. This statement does a logical recursion
+   * into '( expr )' which has highest precedence as it must be eagerly evaluated to be in Int.
    */
   def numberOrBracedExpr: Parser[Int] = wholeNumber ^^ (_.toInt) | "("~>expr<~")"
 
