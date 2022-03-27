@@ -91,7 +91,7 @@ object YetAnotherArithmeticExpressionEvaluator {
             Try {
               val answer = evaluate(expr)
               println(s"$expr = $answer")
-              line += line
+              line += 1
             } match {
               case Failure(exception) =>
                 System.err.println(s"[WARN] line $line - ${exception}")
