@@ -3,13 +3,23 @@ name: Scala CI
 on:
   push:
     branches: [ master ]
+    # Docs-only pushes cannot change compiled code, so skip the build.
+    # Deliberately NOT on pull_request: every PR still gets full verification.
+    paths-ignore: [ 'docs/**', '**/*.md' ]
   pull_request:
     branches: [ master ]
+
+# Cancel superseded runs on the same ref so a stale build cannot keep billing
+# after a newer push lands.
+concurrency:
+  group: scala-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
     - uses: actions/checkout@v2
